@@ -39,10 +39,14 @@ class BinaryTree:
 
 
 if __name__ == '__main__':
+    #Creo un bnarytree con el numero 8 en el nodo raíz
     bt = BinaryTree(8)
-    print("esto es coso")
+    
+    #Agrego datos al binarytree
     bt.agregar(2)
     bt.agregar(1)
     bt.agregar(14)
+
+    #muestro datos en consola
     datos = bt.listar()
     print(datos)

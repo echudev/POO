@@ -1,13 +1,11 @@
-from typing import Union
-
 class Node:
     def __init__(self, data):
         self.data = data
-        self.next: Union[Node, None] = None
+        self.next = None
 
 class LinkedList:
     def __init__(self):
-        self.head: Union[Node, None] = None
+        self.head = None
 
     def agregar_adelante(self, data):
         new_node = Node(data)               
