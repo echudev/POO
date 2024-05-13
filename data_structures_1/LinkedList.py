@@ -58,30 +58,31 @@ class LinkedList:
                 current = current.next
             print(f'El dato: {dato} no se encuentra en la lista')
 
-
     def listar(self):
         if self.head is None:
-            print("la lista está vacia") 
+            return None
         else:
+            lista = []
             current = self.head
-            count = 0
             while current:
-                print(f'{count} - {current.data}')
+                lista.append(current.data)
                 current = current.next
-                count = count + 1
+            return lista
    
 
 # Programa con datos de prueba
 if __name__ == "__main__":
     llist = LinkedList()
-    llist.buscar(13)
+    
     llist.agregar_atras("un dato")
     llist.agregar_adelante(1)
     llist.agregar_adelante(5)
     llist.agregar_atras("un dato final")
     llist.agregar_adelante(13)
     llist.agregar_adelante(87)
-    llist.listar()
+
     llist.buscar(13)
     llist.borrar(87)
-    llist.listar()
+
+    datos = llist.listar()
+    print(f'Datos en la lista: {datos}')
