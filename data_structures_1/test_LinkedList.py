@@ -52,7 +52,13 @@ class LinkedListTest(unittest.TestCase):
         self.linked_list.borrar(42)
         self.assertEqual(self.linked_list.head.data, 13)
         self.assertIsNone(self.linked_list.head.next)
-
+    
+    def test_listar(self):
+        self.linked_list.agregar_adelante(10)
+        self.linked_list.agregar_adelante(20)
+        self.linked_list.agregar_atras(30)
+        datos = self.linked_list.listar()
+        self.assertListEqual(datos, [20, 10, 30])
   
 if __name__ == "__main__":
     unittest.main()
