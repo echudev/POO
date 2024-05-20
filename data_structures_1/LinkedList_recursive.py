@@ -29,6 +29,37 @@ class LinkedList:
             nodo_actual.data = num
             nodo_actual.next = nodo_nuevo
             
+    # Busca un valor en la lista, devuelve True si lo encuentra, False si no
+    def buscar(self, num, nodo_actual=None):
+        if self.head == None:
+            return False
+        
+        if nodo_actual == None:
+            nodo_actual = self.head
+
+        if nodo_actual.data == num:
+            return True
+        elif nodo_actual.next == None:
+            return False
+        else:
+            return self.buscar(num, nodo_actual.next)
+        
+    # Borra un valor de la lista
+    def borrar(self, num, nodo_actual=None):
+        if nodo_actual == None:
+            nodo_actual = self.head
+            
+        if num == self.head.data:
+            self.head = self.head.next
+            return 
+        
+        if num == nodo_actual.data:
+            return nodo_actual.next
+        elif nodo_actual.next:
+            nodo_actual.next = self.borrar(num, nodo_actual.next)
+
+        return nodo_actual
+    
 
     # devuelve una lista con todos los valores de la linkedList
     def listar(self, nodo_actual=None):
@@ -42,7 +73,7 @@ class LinkedList:
         if nodo_actual.next:
             lista += self.listar(nodo_actual.next)
         return lista
-
+    
 
 
 if __name__ == "__main__":
@@ -60,6 +91,13 @@ if __name__ == "__main__":
     ll.agregar(13)
     ll.agregar(98)
     ll.agregar(-4)
+    busqueda1 = ll.buscar(18)
+    busqueda2 = ll.buscar(2)
+    print(ll.listar())
+    print(busqueda1, busqueda2)
+    ll.borrar(11)
+    ll.borrar(98)
+    ll.borrar(-4)
     print(ll.listar())
 
     
