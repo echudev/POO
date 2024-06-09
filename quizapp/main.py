@@ -1,142 +1,118 @@
-db_preguntas =[ 
-    ['cuantos años tiene marcos', [20, 30, 40, 50], 0 , 'facil'], 
-    ['cuantos años tiene diego', [20, 30, 40, 50], 2, 'facil'],
-    ['cuantos años tiene julio', [20, 30, 40, 50], 1, 'medio'] 
-]
 import sqlite3
-con = sqlite3.connect('pythonquizados.db')
-cur = con.cursor()
+
+
+class DB_admin:
+    # clase que maneja conexión y consultas con base de datos
+    def __init__(self):
+        self.db_path = './db/quizapp.db'
+     # Método para ejecutar consultas a la base de datos
+    def run_query(self, query, parameters = ()):
+        # usando 'with' se cierra automáticamente la conexión luego de ejecutar la consulta
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            result = cursor.execute(query, parameters)
+            conn.commit()
+        return result
 
 
 
 class Jugador:
     def __init__(self, nombre):
         self.__nombre = nombre
+        self.__puntaje = 0
         self.__historial = []
 
     def getNombre(self):
         return self.__nombre
     
-    def setHistorial(self):
+    def set_puntaje(self, puntaje):
+        self.__puntaje += puntaje
+    
+    def get_puntaje(self):
+        return self.__puntaje
+    
+    def set_historial(self):
         pass
-    def getHistorial(self):
+
+    def get_historial(self):
         return self.__historial
     
 
-
-class Dificultad:
-    def __init__(self):
-        self.__niveles = ['facil','medio', 'dificil']
-    
-    def setNiveles(self):
-        # accede a los niveles de la base de datos y los setea
-        # en self.__niveles
-        pass
-
-    def getNiveles(self):
-        return self.__niveles
-    
-    
-     
 class Pregunta:
-    def __init__(self, enunciado, respuestas, indice_respuesta_correcta):
-        self.enunciado = enunciado
-        self.respuestas = respuestas
-        self.indice_respuesta_correcta = indice_respuesta_correcta
+    def __init__(self, nivel: int, enunciado: str):
+        self.__nivel = nivel
+        self.__enunciado = enunciado
+        self.__respuestas: list[Respuesta] = []
 
-    def getEnunciado(self):
-        return self.enunciado
+    def get_enunciado(self):
+            return self.__enunciado
     
-    def getRespuestas(self):
-        return self.respuestas
+    def set_respuestas(self, respuestas):
+            self.__respuestas = respuestas
+            
+    def get_texto_respuestas(self):
+            lista: list[str] = []
+            for respuesta in self.__respuestas:
+                 lista.append(respuesta.get_texto())
+            return lista
+            
+    def get_nivel(self):
+            return self.__nivel
 
-    def verificarRespuesta(self, indice_respuesta_jugador):
-        return indice_respuesta_jugador == self.indice_respuesta_correcta
 
 
-class Resultado:
-    def __init__(self, jugador, nivel, puntaje):
-        self.jugador = jugador
-        self.nivel = nivel
-        self.puntaje = puntaje
+class Respuesta:
+    def __init__(self, texto: str, correcta: int):
+            self.__texto = texto
+            self.__correcta = correcta
     
-    def getResultado(self):
-        return [self.jugador, self.nivel, self.puntaje]
-    
+    def get_texto(self):
+            return self.__texto
+    def get_correcta(self):
+            return self.__correcta
 
-
-class TablaResultados:
-    def __init__(self):
-        self.lista = []
-    
-    def setResultados(self):
-        # llamo a base de datos y traigo los resultados de los jugadores
-        pass
- 
-    def setResultadoNuevo(self):
-        pass
-
-    def getResultados(self):
-        return self.lista
-    
 
 
 class Juego:
     def __init__(self):
-        self.puntaje_acumulado = 0
-        self.lista_preguntas = []
-
-    def setPuntajeAcumulado(self, puntos):
-        self.puntaje_acumulado += puntos
+        self.db = DB_admin()
+        self.preguntas = []
+            
+    def set_preguntas(self):
+        query = 'SELECT * FROM Preguntas WHERE nivel_id = 1 ORDER BY RANDOM() LIMIT 3;'
+        rows = self.db.run_query(query)
+        for row in rows:  
+            # instancio la pregunta
+            enunciado, nivel = row[1], row[2]
+            nueva_pregunta = Pregunta(nivel, enunciado)
+ 
+            # instancio las respuestas para la pregunta
+            query2 = 'SELECT * FROM Respuestas WHERE pregunta_id = ? ORDER BY RANDOM();'
+            rows2 = self.db.run_query(query2, (row[0],))
+            respuestas = []
+            for row_ in rows2:
+                 texto, correcta = row_[1], row_[2]
+                 nueva_respuesta = Respuesta(texto, correcta)
+                 respuestas.append(nueva_respuesta)
+            nueva_pregunta.set_respuestas(respuestas)
+            self.preguntas.append(nueva_pregunta)
         
-    def getPuntajeAcumulado(self):
-        return self.puntaje_acumulado
-    
-    def setPreguntas(self, dificultad):
-        # llamo a base de datos y traigo las preguntas que coincidan con la dificultad seleccionada por el jugador
-
-        # lleno la lista 'preguntas' con las data obtenida de la base de datos
-        for pregunta in db_preguntas:
-            nueva_pregunta = Pregunta(pregunta[0], pregunta[1], pregunta[2])
-            self.lista_preguntas.append(nueva_pregunta)
+        self.get_preguntas()
         
-    def getPreguntas(self):
-        if len(self.lista_preguntas) == 0:
+    def get_preguntas(self):
+        if len(self.preguntas) == 0:
             return False
-        return self.lista_preguntas
+        else:
+            for pregunta in self.preguntas:
+                print(pregunta.get_enunciado())
+                print(pregunta.get_texto_respuestas())    
+                user_choice = input('ingrese su respuesta: ')
+            return
 
 
     def jugar(self):
-        dificultad = Dificultad()
-        niveles = dificultad.getNiveles()
-
-        print ('Bienvenido a Pythonquizados \n')
-        jugador = Jugador(input('Ingresa tu nombre: '))
-    
-        for nivel in niveles:
-            print(f'Nivel de dificultad: {nivel}')
-        dificultad_jugador = input('Podes seleccionar la dificultad que quieras: ')
-
-        self.setPreguntas(dificultad_jugador)
-            # pasa todas las pretuntas respondiendo de a 1
-            # cuando no hay mas preguntas retorna flase
-        print(f'{jugador.getNombre()} está jugando')
-
-        if self.lista_preguntas:
-            for pregunta in self.lista_preguntas:
-                print(pregunta.getEnunciado())
-                respuestas = pregunta.getRespuestas()
-                for respuesta in respuestas:
-                    print(f'{respuesta}')
-                indice_respuesta_jugador = int(input('Ingresa tu respuesta: '))
-                if pregunta.verificarRespuesta(indice_respuesta_jugador):
-                    self.setPuntajeAcumulado(10)
-            
-                
-            resultado = Resultado(jugador.getNombre(), dificultad_jugador, self.getPuntajeAcumulado())
-            for item in resultado.getResultado():
-                print(item)
-        return 
+        self.set_preguntas()
+        return   
     
     
 
