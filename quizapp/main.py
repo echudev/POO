@@ -97,7 +97,6 @@ class Juego:
             nueva_pregunta.set_respuestas(respuestas)
             self.preguntas.append(nueva_pregunta)
         
-        self.get_preguntas()
         
     def get_preguntas(self):
         if len(self.preguntas) == 0:
@@ -112,6 +111,7 @@ class Juego:
 
     def jugar(self):
         self.set_preguntas()
+        self.get_preguntas()
         return   
     
     
