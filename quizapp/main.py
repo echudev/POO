@@ -1,4 +1,5 @@
 import sqlite3
+import tkinter as tk
 
 
 class DB_admin:
@@ -114,9 +115,6 @@ class Juego:
         self.get_preguntas()
         return   
     
-    
-
-
 
 if __name__ == '__main__':
     try:
