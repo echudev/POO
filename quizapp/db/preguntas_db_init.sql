@@ -2,13 +2,6 @@
 
 BEGIN TRANSACTION;
 
-CREATE TABLE Jugador (
-    id INTEGER PRIMARY KEY,
-    nombre VARCHAR(20) NOT NULL,
-    contraseña VARCHAR(50) NOT NULL
-);
-
-
 CREATE TABLE Niveles (
     id INTEGER PRIMARY KEY NOT NULL,
     nombre VARCHAR(20) NOT NULL,
@@ -29,16 +22,6 @@ CREATE TABLE Respuestas (
     correcta INTEGER NOT NULL,
     pregunta_id TEXT NOT NULL,
     FOREIGN KEY (pregunta_id) REFERENCES Pregunta(id)
-);
-
-CREATE TABLE HistorialPartidas (
-    id INTEGER PRIMARY KEY,
-    jugador_id INTEGER NOT NULL,
-    nivel_id TEXT NOT NULL,
-    tiempo INTEGER NOT NULL,
-    puntaje INTEGER NOT NULL,
-    FOREIGN KEY (jugador_id) REFERENCES Jugador(id),
-    FOREIGN KEY (nivel_id) REFERENCES Nivel(id)
 );
 
 INSERT INTO Niveles (id, nombre, puntaje) VALUES
