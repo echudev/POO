@@ -1,3 +1,4 @@
+import tkinter as tk
 from models.pregunta import Pregunta
 from models.respuesta import Respuesta
 from db import run_query
@@ -41,3 +42,10 @@ class Juego:
         self.set_preguntas()
         self.get_preguntas()
         return  
+
+if __name__ == '__main__':
+    try:
+        game = Juego()
+        game.jugar()
+    except Exception as e:
+        print(e)
