@@ -1,4 +1,4 @@
-class Usuario:
+class Jugador:
     def __init__(self, nombre):
         self.__nombre = nombre
         self.__puntaje = 0
