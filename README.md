@@ -1,2 +1,2 @@
 el proyecto 'QuizApp' se muda a un repositorio aparte:
-[https://](https://github.com/echudev/quizapp)
+[Repositorio Nuevo](https://github.com/echudev/quizapp)
