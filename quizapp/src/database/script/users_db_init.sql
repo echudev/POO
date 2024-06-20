@@ -4,7 +4,7 @@ BEGIN TRANSACTION;
 CREATE TABLE Usuarios (
     id INTEGER PRIMARY KEY,
     nombre VARCHAR(20) NOT NULL,
-    contraseña VARCHAR(50) NOT NULL
+    contrasenia VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE HistorialPartidas (
