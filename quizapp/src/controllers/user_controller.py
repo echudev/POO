@@ -1,13 +1,13 @@
-from models.jugador import Jugador
+from models.user_model import User
 from tkinter import messagebox
 
-class JugadorController:
+class UserController:
     def __init__(self):
-        self.model = Jugador()
+        self.model = User()
 
     def register(self, nombre, contrasenia):
         try:
-            success, message = self.model.registrar_jugador(nombre, contrasenia)
+            success, message = self.model.registrar_usuario(nombre, contrasenia)
             if success:
                 messagebox.showinfo("Success", message)
             else:

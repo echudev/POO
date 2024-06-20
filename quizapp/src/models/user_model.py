@@ -1,7 +1,7 @@
 import sqlite3
 from database.run_query import run_query
 
-class Jugador:
+class User:
     def __init__(self):
         self.__nombre = None
         self.__puntaje = 0
@@ -26,15 +26,15 @@ class Jugador:
         return self.__historial
 
 
-    def jugador_existe(self, nombre):
+    def usuario_existe(self, nombre):
         query = 'SELECT * FROM Usuarios WHERE nombre = ?'
         db = "./database/usuarios.db"
         query = run_query(query, db, (nombre,))
         user = query.fetchone()
         return user is not None
     
-    def registrar_jugador(self, nombre, contrasenia):
-        if self.jugador_existe(nombre):
+    def registrar_usuario(self, nombre, contrasenia):
+        if self.usuario_existe(nombre):
             return False, "El nombre de usaurio ya existe!!"
         query = 'INSERT INTO Usuarios (nombre, contrasenia) VALUES (?, ?)'
         db = "./database/usuarios.db"
@@ -45,7 +45,7 @@ class Jugador:
             print(f"SQLite IntegrityError: {e}")
             return False
         except Exception as e:
-            print(f"Unexpected error in Jugador.registrar_jugador: {e}")
+            print(f"Unexpected error in Usuario.registrar_usuario: {e}")
             return False
 
     def validar_usuario(self, nombre, contrasenia):

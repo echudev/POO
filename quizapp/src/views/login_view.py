@@ -1,12 +1,12 @@
 import tkinter as tk
-from controllers.jugador_controller import JugadorController
+from controllers.user_controller import UserController
 from views.register_view import RegisterView  
 
 class LoginView:
     def __init__(self, root):
         self.root = root
         self.root.title("Login")
-        self.controller = JugadorController()
+        self.controller = UserController()
         self.create_widgets()
 
     def create_widgets(self):
