@@ -7,10 +7,10 @@ class User:
         self.__puntaje = 0
         self.__historial = []
 
-    def setNombre(self, nombre):
+    def set_nombre(self, nombre):
         self.__nombre = nombre
 
-    def getNombre(self):
+    def get_nombre(self):
         return self.__nombre
     
     def set_puntaje(self, puntaje):
@@ -29,8 +29,8 @@ class User:
     def usuario_existe(self, nombre):
         query = 'SELECT * FROM Usuarios WHERE nombre = ?'
         db = "./database/usuarios.db"
-        query = run_query(query, db, (nombre,))
-        user = query.fetchone()
+        response = run_query(query, db, (nombre,))
+        user = response.fetchone()
         return user is not None
     
     def registrar_usuario(self, nombre, contrasenia):
@@ -52,11 +52,13 @@ class User:
         query = 'SELECT * FROM Usuarios WHERE nombre = ? AND contrasenia = ?'
         db = "./database/usuarios.db"
         try:
-            user = run_query(query, db, (nombre, contrasenia))
-            self.setNombre(user[0][1])
-            print(f'usuario {user} validado')
-            return True
+            response = run_query(query, db, (nombre, contrasenia))
+            user = response.fetchone()
+            print(user)
+            if user is None:
+                return False, "Nombre de usuario o contraseña incorrectos"
+            else: 
+                return True, f'Bienvenido {user[1]}'
         except Exception as e:
-            print('usuario o contraseña incorrectos')
             print(e)
             return False
